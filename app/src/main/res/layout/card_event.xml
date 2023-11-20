@@ -27,7 +27,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:letterSpacing="0.01"
             android:textColor="?colorOnPrimary"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@id/avatar"
@@ -89,16 +88,54 @@
             app:constraint_referenced_ids="avatar,published,menu" />
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/eventType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:letterSpacing="0.02"
             android:layout_marginTop="@dimen/common_spacing"
             android:layout_marginEnd="@dimen/common_spacing"
+            android:letterSpacing="0.03"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@id/eventDate"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/headerBarrier"
+            tools:text="Offline" />
+
+        <TextView
+            android:id="@+id/eventDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:letterSpacing="0.02"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eventType"
+            tools:text="16.05.22 12:00" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/big_spacing"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:letterSpacing="0.02"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/eventDate"
             tools:text="Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните" />
+
+        <TextView
+            android:id="@+id/link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/big_spacing"
+            android:layout_marginEnd="@dimen/common_spacing"
+            android:autoLink="web"
+            android:letterSpacing="0.02"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content"
+            tools:text="https://m2.material.io/components/cards" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/like"
@@ -108,7 +145,7 @@
             android:layout_marginTop="@dimen/big_spacing"
             app:icon="@drawable/baseline_favorite_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content"
+            app:layout_constraintTop_toBottomOf="@id/link"
             tools:text="10" />
 
         <com.google.android.material.button.MaterialButton
@@ -117,9 +154,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/big_spacing"
+            android:contentDescription="@string/share"
             app:icon="@drawable/baseline_share_24"
             app:layout_constraintStart_toEndOf="@id/like"
-            app:layout_constraintTop_toBottomOf="@id/content" />
+            app:layout_constraintTop_toBottomOf="@id/link" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/participation"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/big_spacing"
+            android:layout_marginEnd="@dimen/common_spacing"
+            app:icon="@drawable/baseline_people_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/link"
+            tools:text="2" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
 

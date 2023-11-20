@@ -8,6 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId = "com.eltex.androidschool"
         minSdk = 24
         targetSdk = 34
