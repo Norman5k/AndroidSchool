@@ -68,7 +68,7 @@
             app:layout_constraintTop_toBottomOf="@id/authorOffset"
             tools:text="11.05.22 11:21" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/menu"
             android:layout_width="40dp"
             android:layout_height="40dp"

@@ -30,6 +30,7 @@
             android:letterSpacing="0.01"
             android:textColor="?colorOnPrimary"
             android:textSize="24sp"
+            android:id="@+id/initial"
             app:layout_constraintBottom_toBottomOf="@id/avatar"
             app:layout_constraintEnd_toEndOf="@id/avatar"
             app:layout_constraintStart_toStartOf="@id/avatar"
@@ -69,8 +70,9 @@
             app:layout_constraintTop_toBottomOf="@id/authorOffset"
             tools:text="11.05.22 11:21" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/menu"
+            android:backgroundTint="?colorBackgroundFloating"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="4dp"

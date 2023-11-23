@@ -3,4 +3,5 @@
     <string name="avatar">avatar</string>
     <string name="menu">menu</string>
     <string name="share">share</string>
+    <string name="not_implemented">Not implemented</string>
 </resources>
