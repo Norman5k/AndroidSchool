@@ -2,32 +2,60 @@ package com.eltex.androidschool.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.ListAdapter
+import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Event
 
 class EventsAdapter(
-    private val likeClickListener: (Event) -> Unit,
-    private val shareClickListener: () -> Unit,
-    private val menuClickListener: () -> Unit,
-    private val participateClickListener: (Event) -> Unit
+    private val listener: EventListener
 ) : ListAdapter<Event, EventViewHolder>(EventItemCallback()) {
+
+    interface EventListener {
+        fun onLikeClickListener(event: Event)
+        fun onShareClickListener(event: Event)
+        fun onDeleteClickListener(event: Event)
+        fun onEditClickListener(event: Event)
+        fun onParticipateClickListener(event: Event)
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CardEventBinding.inflate(inflater, parent, false)
         val eventViewHolder = EventViewHolder(binding)
 
         binding.like.setOnClickListener {
-            likeClickListener(getItem(eventViewHolder.adapterPosition))
+            listener.onLikeClickListener(getItem(eventViewHolder.adapterPosition))
         }
         binding.share.setOnClickListener {
-            shareClickListener()
+            listener.onShareClickListener(getItem(eventViewHolder.adapterPosition))
         }
         binding.menu.setOnClickListener {
-            menuClickListener()
+            PopupMenu(it.context, it).apply {
+                inflate(R.menu.event_actions_menu)
+
+                setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
+                        R.id.delete -> {
+                            listener.onDeleteClickListener(getItem(eventViewHolder.adapterPosition))
+                            true
+                        }
+
+                        R.id.edit -> {
+                            listener.onEditClickListener(getItem(eventViewHolder.adapterPosition))
+                            true
+                        }
+
+                        else -> false
+
+                    }
+                }
+                show()
+            }
+
         }
         binding.participation.setOnClickListener {
-            participateClickListener(getItem(eventViewHolder.adapterPosition))
+            listener.onParticipateClickListener(getItem(eventViewHolder.adapterPosition))
         }
 
         return eventViewHolder

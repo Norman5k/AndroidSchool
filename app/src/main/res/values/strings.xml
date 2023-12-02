@@ -4,4 +4,11 @@
     <string name="menu">menu</string>
     <string name="share">share</string>
     <string name="not_implemented">Not implemented</string>
+    <string name="save_event_title">Save event</string>
+    <string name="new_event_title">New event</string>
+    <string name="content">Content</string>
+    <string name="new_event_description">New event</string>
+    <string name="event_empty_error">Content must not be blank</string>
+    <string name="delete_event">Delete Event</string>
+    <string name="edit_event">Edit Event</string>
 </resources>

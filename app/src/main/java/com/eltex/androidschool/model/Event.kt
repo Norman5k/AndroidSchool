@@ -5,6 +5,9 @@ data class Event(
     val content: String = "",
     val author: String = "",
     val published: String = "",
+    val eventType: String = "",
+    val eventDate: String = "",
+    val link: String = "",
     val likedByMe: Boolean = false,
     val participatedByMe: Boolean = false,
 )
