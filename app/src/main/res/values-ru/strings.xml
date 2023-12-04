@@ -5,4 +5,11 @@
     <string name="menu">меню</string>
     <string name="share">поделиться</string>
     <string name="not_implemented">Не реализовано</string>
+    <string name="save_event_title">Сохранить событие</string>
+    <string name="new_event_title">Новое событие</string>
+    <string name="content">Контент</string>
+    <string name="new_event_description">Новое событие</string>
+    <string name="event_empty_error">Контент не может быть пустым</string>
+    <string name="delete_event">Удалить событие</string>
+    <string name="edit_event">Редактировать событие</string>
 </resources>
