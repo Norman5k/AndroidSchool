@@ -1,13 +1,34 @@
 package com.eltex.androidschool.dao
 
-import com.eltex.androidschool.model.Event
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
+import com.eltex.androidschool.entity.EventEntity
+import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface EventsDao {
-    fun getAll(): List<Event>
-    fun save(event: Event): Event
-    fun likeById(eventId: Long): Event
-    fun participateById(eventId: Long): Event
+    @Query("SELECT * FROM Events ORDER BY id DESC")
+    fun getAll(): Flow<List<EventEntity>>
+    @Upsert
+    fun save(event: EventEntity): Long
+    @Query(
+        """
+            UPDATE Events SET likedByMe =
+            CASE WHEN likedByMe = 0 THEN 1 ELSE 0 END
+            WHERE id = :eventId;
+        """)
+    fun likeById(eventId: Long)
+    @Query(
+        """
+            UPDATE Events SET participatedByMe =
+            CASE WHEN participatedByMe = 0 THEN 1 ELSE 0 END
+            WHERE id = :eventId;
+        """)
+    fun participateById(eventId: Long)
+    @Query("DELETE FROM Events WHERE id = :eventId")
     fun deleteById(eventId: Long)
-    fun getEventById(eventId: Long): Event
+    @Query("SELECT * FROM Events WHERE id = :eventId")
+    fun getEventById(eventId: Long): EventEntity
 
 }

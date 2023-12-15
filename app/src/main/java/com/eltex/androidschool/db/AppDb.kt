@@ -1,11 +1,18 @@
 package com.eltex.androidschool.db
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
-import com.eltex.androidschool.dao.EventsDaoImpl
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.eltex.androidschool.dao.EventsDao
+import com.eltex.androidschool.entity.EventEntity
 
-class AppDb private constructor(db: SQLiteDatabase) {
-    val eventsDao = EventsDaoImpl(db)
+@Database(
+    entities = [EventEntity::class],
+    version = 1,
+)
+abstract class AppDb : RoomDatabase() {
+    abstract val eventsDao : EventsDao
 
     companion object {
         @Volatile
@@ -23,9 +30,10 @@ class AppDb private constructor(db: SQLiteDatabase) {
                     return it
                 }
 
-                val appDb = AppDb(
-                    DbHelper(applicationContext).writableDatabase
-                )
+                val appDb = Room.databaseBuilder(applicationContext, AppDb::class.java, "app_db")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = appDb
 
