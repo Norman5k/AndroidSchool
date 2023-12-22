@@ -11,4 +11,9 @@
     <string name="event_empty_error">Content must not be blank</string>
     <string name="delete_event">Delete Event</string>
     <string name="edit_event">Edit Event</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="posts_description">Posts</string>
+    <string name="events_description">Events</string>
+    <string name="users_description">Users</string>
+    <string name="new_event_label">New event</string>
 </resources>

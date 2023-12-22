@@ -20,23 +20,19 @@ class SQLiteEventRepository(private val dao: EventsDao) : EventRepository {
         dao.likeById(id)
     }
 
-    override fun addEvent(content: String) {
+    override fun saveEvent(id: Long, content: String) {
         dao.save(
             EventEntity.fromEvent(
-                Event(content = content)
+                Event(id = id, content = content)
             )
         )
-
     }
 
     override fun deleteById(id: Long) {
         dao.deleteById(id)
-
-
     }
 
-    override fun editById(id: Long, content: String) {
-        val event = dao.getEventById(id).toEvent()
-        dao.save(EventEntity.fromEvent(event.copy(id = id, content = content)))
+   override fun editById(id: Long, content: String) {
+        dao.updateById(id) { it.copy(content = content)}
     }
 }

@@ -2,6 +2,7 @@ package com.eltex.androidschool.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.eltex.androidschool.entity.EventEntity
 import kotlinx.coroutines.flow.Flow
@@ -30,5 +31,10 @@ interface EventsDao {
     fun deleteById(eventId: Long)
     @Query("SELECT * FROM Events WHERE id = :eventId")
     fun getEventById(eventId: Long): EventEntity
-
+    @Transaction
+    fun updateById(id: Long, update: (EventEntity) -> EventEntity) {
+        val event = getEventById(id)
+        val updatedEvent = update(event)
+        save(updatedEvent)
+    }
 }
