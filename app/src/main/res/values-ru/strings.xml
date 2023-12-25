@@ -12,4 +12,9 @@
     <string name="event_empty_error">Контент не может быть пустым</string>
     <string name="delete_event">Удалить событие</string>
     <string name="edit_event">Редактировать событие</string>
+    <string name="hello_blank_fragment">Пустой фрагмент</string>
+    <string name="posts_description">Посты</string>
+    <string name="events_description">События</string>
+    <string name="users_description">Пользователи</string>
+    <string name="new_event_label">Новое событие</string>
 </resources>

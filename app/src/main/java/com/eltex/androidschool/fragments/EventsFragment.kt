@@ -47,14 +47,6 @@ class EventsFragment : Fragment() {
 
         val binding = FragmentEventsBinding.inflate(inflater, container, false)
 
-        /*if (requireActivity().intent.action == Intent.ACTION_SEND) { // Обязательно проверьте соответствует ли action ожидаемому
-            val text = requireActivity().intent.getStringExtra(Intent.EXTRA_TEXT)
-            requireActivity().intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
-            val intent = Intent(requireContext(), NewEventActivity::class.java)
-                .putExtra(Intent.EXTRA_TEXT, text)
-            newEventContract.launch(intent)
-        }*/
-
         val eventsAdapter = EventsAdapter(
             object : EventsAdapter.EventListener {
                 override fun onLikeClickListener(event: Event) {
@@ -76,7 +68,9 @@ class EventsFragment : Fragment() {
                 }
 
                 override fun onEditClickListener(event: Event) {
-                    findNavController()
+                    requireParentFragment()
+                        .requireParentFragment()
+                        .findNavController()
                         .navigate(
                             R.id.action_bottomNavigationFragment_to_newEventFragment,
                             bundleOf(
