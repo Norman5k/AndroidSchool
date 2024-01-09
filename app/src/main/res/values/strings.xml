@@ -16,4 +16,7 @@
     <string name="events_description">Events</string>
     <string name="users_description">Users</string>
     <string name="new_event_label">New event</string>
+    <string name="unknown_error">Unknown error</string>
+    <string name="network_error">Network error</string>
+    <string name="retry">Retry</string>
 </resources>

@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -17,9 +19,9 @@ import com.eltex.androidschool.R
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.databinding.FragmentEventsBinding
-import com.eltex.androidschool.db.AppDb
 import com.eltex.androidschool.model.Event
-import com.eltex.androidschool.repository.SQLiteEventRepository
+import com.eltex.androidschool.repository.NetworkEventRepository
+import com.eltex.androidschool.utils.getText
 import com.eltex.androidschool.viewmodel.EventViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,26 +33,22 @@ class EventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val binding = FragmentEventsBinding.inflate(inflater, container, false)
+
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 initializer {
                     EventViewModel(
-                        SQLiteEventRepository(
-                            AppDb.getInstance(
-                                requireContext().applicationContext
-                            ).eventsDao
-                        )
+                        NetworkEventRepository()
                     )
                 }
             }
         }
 
-        val binding = FragmentEventsBinding.inflate(inflater, container, false)
-
         val eventsAdapter = EventsAdapter(
             object : EventsAdapter.EventListener {
                 override fun onLikeClickListener(event: Event) {
-                    viewModel.likeById(event.id)
+                    viewModel.like(event)
                 }
 
                 override fun onShareClickListener(event: Event) {
@@ -82,7 +80,7 @@ class EventsFragment : Fragment() {
                 }
 
                 override fun onParticipateClickListener(event: Event) {
-                    viewModel.participateById(event.id)
+                    viewModel.participate(event)
                 }
 
             }
@@ -94,9 +92,42 @@ class EventsFragment : Fragment() {
             OffsetDecoration(resources.getDimensionPixelSize(R.dimen.small_spacing))
         )
 
-        viewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach {
-                eventsAdapter.submitList(it.events)
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.load()
+        }
+
+        binding.retryButton.setOnClickListener {
+            viewModel.load()
+        }
+
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            NewEventFragment.EVENT_UPDATED, viewLifecycleOwner
+        ) { _, _ ->
+            viewModel.load()
+        }
+
+        viewModel.state
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach { state ->
+                binding.swipeRefresh.isRefreshing = state.isRefreshing
+
+                val emptyError = state.emptyError
+                binding.errorGroup.isVisible = emptyError != null
+                binding.errorText.text = emptyError?.getText(requireContext())
+
+                binding.progress.isVisible = state.isEmptyLoading
+
+                state.refreshingError?.let {
+                    Toast.makeText(
+                        requireContext(),
+                        it.getText(requireContext()),
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    viewModel.handleError()
+                }
+
+                eventsAdapter.submitList(state.events)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 

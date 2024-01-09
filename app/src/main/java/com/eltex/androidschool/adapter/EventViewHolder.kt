@@ -24,8 +24,8 @@ class EventViewHolder(private val binding: CardEventBinding) :
         binding.author.text = event.author
         binding.published.text = event.published
         binding.initial.text = event.author.take(1)
-        binding.eventType.text = event.eventType
-        binding.eventDate.text = event.eventDate
+        binding.eventType.text = event.type
+        binding.eventDate.text = event.datetime
         binding.link.text = event.link
         updateLike(event.likedByMe)
         updateParticipate(event.participatedByMe)

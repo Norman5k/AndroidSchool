@@ -34,6 +34,8 @@ android {
             }
 
         buildConfigField("String", "API_KEY", secretProps.getProperty("API_KEY"))
+
+        buildConfigField("String", "AUTH_TOKEN", secretProps.getProperty("AUTH_TOKEN"))
     }
 
     buildTypes {
@@ -73,11 +75,13 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-ktx:$roomVersion")
-    ksp("androidx.room:room-compiler:$roomVersion")
-
     val navigationVersion = "2.7.6"
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
+
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

@@ -17,4 +17,7 @@
     <string name="events_description">События</string>
     <string name="users_description">Пользователи</string>
     <string name="new_event_label">Новое событие</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+    <string name="network_error">Сетевая ошибка</string>
+    <string name="retry">Повторить</string>
 </resources>
