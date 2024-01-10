@@ -83,5 +83,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 }

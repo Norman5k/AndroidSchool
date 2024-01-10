@@ -20,4 +20,5 @@
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="network_error">Сетевая ошибка</string>
     <string name="retry">Повторить</string>
+    <string name="edit_event_label">Редактирование события</string>
 </resources>

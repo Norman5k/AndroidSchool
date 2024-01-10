@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.eltex.androidschool.R
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
+import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.repository.NetworkEventRepository
@@ -39,7 +40,7 @@ class EventsFragment : Fragment() {
             viewModelFactory {
                 initializer {
                     EventViewModel(
-                        NetworkEventRepository()
+                        NetworkEventRepository(EventsApi.INSTANCE)
                     )
                 }
             }
@@ -70,7 +71,7 @@ class EventsFragment : Fragment() {
                         .requireParentFragment()
                         .findNavController()
                         .navigate(
-                            R.id.action_bottomNavigationFragment_to_newEventFragment,
+                            R.id.action_bottomNavigationFragment_to_editEventFragment,
                             bundleOf(
                                 NewEventFragment.ARG_ID to event.id,
                                 NewEventFragment.ARG_CONTENT to event.content,
