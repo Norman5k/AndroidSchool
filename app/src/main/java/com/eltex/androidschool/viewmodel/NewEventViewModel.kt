@@ -19,25 +19,22 @@ class NewEventViewModel(
     fun save(content: String) {
         _state.update { it.copy(status = Status.Loading) }
 
-        if (id != 0L) {
-            //repository.editById(id, content)
-        } else {
-            repository.saveEvent(id, content, object : Callback<Event> {
-                override fun onSuccess(data: Event) {
-                    _state.update {
-                        it.copy(
-                            status = Status.Idle,
-                            result = data
-                        )
-                    }
+        repository.saveEvent(id, content, object : Callback<Event> {
+            override fun onSuccess(data: Event) {
+                _state.update {
+                    it.copy(
+                        status = Status.Idle,
+                        result = data
+                    )
                 }
+            }
 
-                override fun onError(throwable: Throwable) {
-                    _state.update { it.copy(status = Status.Error(throwable)) }
-                }
+            override fun onError(throwable: Throwable) {
+                _state.update { it.copy(status = Status.Error(throwable)) }
+            }
 
-            })
-        }
+        })
+
     }
 
     fun handleError() {

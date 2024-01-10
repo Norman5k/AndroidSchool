@@ -1,5 +1,7 @@
 package com.eltex.androidschool.repository
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.eltex.androidschool.BuildConfig
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.utils.Callback
@@ -14,8 +16,8 @@ import okhttp3.Response
 import okhttp3.internal.EMPTY_REQUEST
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.IOException
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 class NetworkEventRepository : EventRepository {
@@ -26,6 +28,7 @@ class NetworkEventRepository : EventRepository {
 
     private val json = Json {
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
 
     private val client = OkHttpClient.Builder()
@@ -253,20 +256,16 @@ class NetworkEventRepository : EventRepository {
             })
     }
 
-    private fun getCurrentTime(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val currentTime = Date()
-        return dateFormat.format(currentTime)
-    }
-
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun saveEvent(
         id: Long,
         content: String,
         callback: Callback<Event>
     ) {
-        val currentTime = getCurrentTime()
+        val timeStamp: String = ZonedDateTime.now().format( DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+
         val request = Request.Builder()
-            .post(json.encodeToString(Event(id, content, datetime = currentTime)).toRequestBody(JSON_TYPE))
+            .post(json.encodeToString(Event(id, content, datetime = timeStamp)).toRequestBody(JSON_TYPE))
             .url("https://eltex-android.ru/api/events")
             .build()
 
