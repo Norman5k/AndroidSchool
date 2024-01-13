@@ -1,10 +1,11 @@
 package com.eltex.androidschool.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.repository.EventRepository
-import com.eltex.androidschool.utils.Callback
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -13,28 +14,27 @@ class NewEventViewModel(
     private val repository: EventRepository,
     private val id: Long,
 ) : ViewModel() {
-
+    private val disposable = CompositeDisposable()
     private val _state = MutableStateFlow(NewEventUiState())
     val state = _state.asStateFlow()
     fun save(content: String) {
         _state.update { it.copy(status = Status.Loading) }
 
-        repository.saveEvent(id, content, object : Callback<Event> {
-            override fun onSuccess(data: Event) {
-                _state.update {
-                    it.copy(
-                        status = Status.Idle,
-                        result = data
-                    )
+        repository.saveEvent(id, content)
+            .subscribeBy(
+                onSuccess = {data->
+                    _state.update {
+                        it.copy(
+                            status = Status.Idle,
+                            result = data
+                        )
+                    }
+                },
+                onError = {throwable->
+                    _state.update { it.copy(status = Status.Error(throwable)) }
                 }
-            }
-
-            override fun onError(throwable: Throwable) {
-                _state.update { it.copy(status = Status.Error(throwable)) }
-            }
-
-        })
-
+            )
+            .addTo(disposable)
     }
 
     fun handleError() {
@@ -45,5 +45,9 @@ class NewEventViewModel(
                 it
             }
         }
+    }
+
+    override fun onCleared() {
+        disposable.dispose()
     }
 }

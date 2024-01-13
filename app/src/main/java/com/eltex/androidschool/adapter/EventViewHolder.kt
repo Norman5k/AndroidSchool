@@ -3,7 +3,7 @@ package com.eltex.androidschool.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
-import com.eltex.androidschool.model.Event
+import com.eltex.androidschool.model.EventUiModel
 
 class EventViewHolder(private val binding: CardEventBinding) :
     RecyclerView.ViewHolder(binding.root) {
@@ -18,7 +18,7 @@ class EventViewHolder(private val binding: CardEventBinding) :
     }
 
     fun bindEvent(
-        event: Event,
+        event: EventUiModel,
     ) {
         binding.content.text = event.content
         binding.author.text = event.author
@@ -29,6 +29,8 @@ class EventViewHolder(private val binding: CardEventBinding) :
         binding.link.text = event.link
         updateLike(event.likedByMe)
         updateParticipate(event.participatedByMe)
+        binding.like.text = event.likes.toString()
+        binding.participation.text = event.participants.toString()
     }
 
     private fun updateParticipate(participatedByMe: Boolean) {
@@ -40,11 +42,14 @@ class EventViewHolder(private val binding: CardEventBinding) :
             }
         )
 
-        binding.participation.text = if (participatedByMe) {
-            1
-        } else {
-            0
-        }.toString()
+        if (binding.participation.text.isNotEmpty()) {
+            binding.participation.text = if (participatedByMe) {
+                (binding.participation.text.toString().toInt() + 1).toString()
+            } else {
+                (binding.participation.text.toString().toInt() - 1).toString()
+            }
+        }
+
     }
 
     private fun updateLike(likedByMe: Boolean) {
@@ -56,10 +61,12 @@ class EventViewHolder(private val binding: CardEventBinding) :
             }
         )
 
-        binding.like.text = if (likedByMe) {
-            1
-        } else {
-            0
-        }.toString()
+        if (binding.like.text.isNotEmpty()) {
+            binding.like.text = if (likedByMe) {
+                (binding.like.text.toString().toInt() + 1).toString()
+            } else {
+                (binding.like.text.toString().toInt() - 1).toString()
+            }
+        }
     }
 }
