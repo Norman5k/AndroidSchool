@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 
 class EventViewModel(
     private val repository: EventRepository,
-    private val mapper: EventUiModelMapper = EventUiModelMapper(),
+    private val mapper: EventUiModelMapper = EventUiModelMapper.DEFAULT,
     private val schedulersFactory: SchedulersFactory = SchedulersFactory.DEFAULT,
 ) : ViewModel() {
     private val onSuccess: (data: EventUiModel) -> Unit = { data ->
