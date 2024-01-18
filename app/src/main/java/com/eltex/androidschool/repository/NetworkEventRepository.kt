@@ -2,26 +2,24 @@ package com.eltex.androidschool.repository
 
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.model.Event
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import java.time.Instant
 
 class NetworkEventRepository(
     private val api: EventsApi
 ) : EventRepository {
-    override fun getEvents(): Single<List<Event>> = api.getAll()
+    override suspend fun getEvents(): List<Event> = api.getAll()
 
-    override fun participateById(id: Long): Single<Event> = api.participate(id)
+    override suspend fun participateById(id: Long): Event = api.participate(id)
 
-    override fun unparticipateById(id: Long): Single<Event> = api.unparticipate(id)
+    override suspend fun unparticipateById(id: Long): Event = api.unparticipate(id)
 
-    override fun likeById(id: Long): Single<Event> = api.like(id)
+    override suspend fun likeById(id: Long): Event = api.like(id)
 
-    override fun dislikeById(id: Long): Single<Event> = api.dislike(id)
-    override fun saveEvent(id: Long, content: String): Single<Event> =
+    override suspend fun dislikeById(id: Long): Event = api.dislike(id)
+    override suspend fun saveEvent(id: Long, content: String): Event =
         api.save(Event(id, content, datetime = Instant.now()))
 
-    override fun deleteById(id: Long): Completable = api.delete(id)
+    override suspend fun deleteById(id: Long) = api.delete(id)
 
 
 }

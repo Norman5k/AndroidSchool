@@ -10,10 +10,16 @@ class EventViewHolder(private val binding: CardEventBinding) :
 
     fun bindEvent(payLoad: EventPayLoad) {
         if (payLoad.liked != null) {
-            updateLike(payLoad.liked)
+            updateLikeIcon(payLoad.liked)
+        }
+        if (payLoad.likes != null) {
+            updateLikeCount(payLoad.likes)
         }
         if (payLoad.participated != null) {
-            updateParticipate(payLoad.participated)
+            updateParticipateIcon(payLoad.participated)
+        }
+        if (payLoad.participants != null) {
+            updateParticipateCount(payLoad.participants)
         }
     }
 
@@ -27,13 +33,13 @@ class EventViewHolder(private val binding: CardEventBinding) :
         binding.eventType.text = event.type
         binding.eventDate.text = event.datetime
         binding.link.text = event.link
-        updateLike(event.likedByMe)
-        updateParticipate(event.participatedByMe)
-        binding.like.text = event.likes.toString()
-        binding.participation.text = event.participants.toString()
+        updateLikeIcon(event.likedByMe)
+        updateLikeCount(event.likes)
+        updateParticipateIcon(event.participatedByMe)
+        updateParticipateCount(event.participants)
     }
 
-    private fun updateParticipate(participatedByMe: Boolean) {
+    private fun updateParticipateIcon(participatedByMe: Boolean) {
         binding.participation.setIconResource(
             if (participatedByMe) {
                 R.drawable.baseline_people_24
@@ -42,17 +48,9 @@ class EventViewHolder(private val binding: CardEventBinding) :
             }
         )
 
-        if (binding.participation.text.isNotEmpty()) {
-            binding.participation.text = if (participatedByMe) {
-                (binding.participation.text.toString().toInt() + 1).toString()
-            } else {
-                (binding.participation.text.toString().toInt() - 1).toString()
-            }
-        }
-
     }
 
-    private fun updateLike(likedByMe: Boolean) {
+    private fun updateLikeIcon(likedByMe: Boolean) {
         binding.like.setIconResource(
             if (likedByMe) {
                 R.drawable.baseline_favorite_24
@@ -60,13 +58,13 @@ class EventViewHolder(private val binding: CardEventBinding) :
                 R.drawable.baseline_favorite_border_24
             }
         )
+    }
 
-        if (binding.like.text.isNotEmpty()) {
-            binding.like.text = if (likedByMe) {
-                (binding.like.text.toString().toInt() + 1).toString()
-            } else {
-                (binding.like.text.toString().toInt() - 1).toString()
-            }
-        }
+    private fun updateLikeCount(likes: Int) {
+        binding.like.text = likes.toString()
+    }
+
+    private fun updateParticipateCount(participants: Int) {
+        binding.participation.text = participants.toString()
     }
 }

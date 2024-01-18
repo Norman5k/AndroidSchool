@@ -70,7 +70,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    val lifecycleVersion = "2.6.2"
+    val lifecycleVersion = "2.7.0"
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
 
     implementation("androidx.activity:activity-ktx:1.8.2")
@@ -88,14 +88,9 @@ dependencies {
 
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // RxJava
-    implementation("io.reactivex.rxjava3:rxjava:3.1.7")
-    // Функции для работы с MainThread
-    implementation("io.reactivex.rxjava3:rxandroid:3.0.2")
-    // Adapter для retrofit
-    implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
-    // Полезные экстеншены для Kotlin
-    implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
+
 }

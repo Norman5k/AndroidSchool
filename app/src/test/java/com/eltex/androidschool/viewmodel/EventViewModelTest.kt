@@ -1,17 +1,19 @@
 package com.eltex.androidschool.viewmodel
 
+import com.eltex.androidschool.MainDispatcherRule
 import com.eltex.androidschool.TestEventUiModelMapper
-import com.eltex.androidschool.TestSchedulersFactory
 import com.eltex.androidschool.model.Event
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.Status
 import com.eltex.androidschool.repository.EventRepository
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 import junit.framework.TestCase.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 class EventViewModelTest {
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Test
     fun `deleteById error then error in state`() {
@@ -19,22 +21,21 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.error(testError)
-
-            },
-            schedulersFactory = TestSchedulersFactory
+                override suspend fun deleteById(id: Long) = throw testError
+            }
         )
 
         viewModel.deleteById(1)
@@ -48,27 +49,25 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(
-                    arrayListOf(
-                        Event(1),
-                        Event(2)
-                    )
+                override suspend fun getEvents(): List<Event> = arrayListOf(
+                    Event(1),
+                    Event(2)
                 )
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.complete()
+                override suspend fun deleteById(id: Long) {}
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -84,22 +83,22 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.error(testError)
+                override suspend fun likeById(id: Long): Event = throw testError
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory
         )
 
         viewModel.like(EventUiModel(likedByMe = false))
@@ -116,28 +115,26 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(
+                override suspend fun getEvents(): List<Event> =
                     arrayListOf(
                         Event(1),
                         Event(2)
                     )
-                )
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> =
-                    Single.just(Event(id, likedByMe = true))
+                override suspend fun likeById(id: Long): Event = Event(id, likedByMe = true)
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -153,22 +150,22 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.error(testError)
+                override suspend fun dislikeById(id: Long): Event = throw testError
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory
         )
 
         viewModel.like(EventUiModel(likedByMe = true))
@@ -185,27 +182,25 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(
-                    arrayListOf(
-                        Event(1, likedByMe = true),
-                        Event(2)
-                    )
+                override suspend fun getEvents(): List<Event> = arrayListOf(
+                    Event(1, likedByMe = true),
+                    Event(2)
                 )
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.just(Event(id, likedByMe = false))
+                override suspend fun dislikeById(id: Long): Event = Event(id, likedByMe = false)
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -221,22 +216,22 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.error(testError)
+                override suspend fun participateById(id: Long): Event = throw testError
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory
         )
 
         viewModel.participate(EventUiModel(participatedByMe = false))
@@ -253,27 +248,26 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(
-                    arrayListOf(
-                        Event(1),
-                        Event(2)
-                    )
+                override suspend fun getEvents(): List<Event> = arrayListOf(
+                    Event(1),
+                    Event(2)
                 )
 
-                override fun participateById(id: Long): Single<Event> = Single.just(Event(1, participatedByMe = true))
+                override suspend fun participateById(id: Long): Event =
+                    Event(1, participatedByMe = true)
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -289,22 +283,22 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.error(testError)
+                override suspend fun unparticipateById(id: Long): Event = throw testError
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory
         )
 
         viewModel.participate(EventUiModel(participatedByMe = true))
@@ -321,27 +315,26 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(
-                    arrayListOf(
-                        Event(1, participatedByMe = true),
-                        Event(2)
-                    )
+                override suspend fun getEvents(): List<Event> = arrayListOf(
+                    Event(1, participatedByMe = true),
+                    Event(2)
                 )
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.just(Event(1, participatedByMe = false))
+                override suspend fun unparticipateById(id: Long): Event =
+                    Event(1, participatedByMe = false)
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -357,22 +350,22 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.error(testError)
+                override suspend fun getEvents(): List<Event> = throw testError
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -385,22 +378,23 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.error(testError)
+                override suspend fun getEvents(): List<Event> =throw testError
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
+
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
@@ -413,22 +407,23 @@ class EventViewModelTest {
 
         val viewModel = EventViewModel(
             repository = object : EventRepository {
-                override fun getEvents(): Single<List<Event>> = Single.just(emptyList())
+                override suspend fun getEvents(): List<Event> = emptyList()
 
-                override fun participateById(id: Long): Single<Event> = Single.never()
+                override suspend fun participateById(id: Long): Event = error("Not implemented")
 
-                override fun unparticipateById(id: Long): Single<Event> = Single.never()
+                override suspend fun unparticipateById(id: Long): Event = error("Not implemented")
 
-                override fun likeById(id: Long): Single<Event> = Single.never()
+                override suspend fun likeById(id: Long): Event = error("Not implemented")
 
-                override fun dislikeById(id: Long): Single<Event> = Single.never()
+                override suspend fun dislikeById(id: Long): Event = error("Not implemented")
 
-                override fun saveEvent(id: Long, content: String): Single<Event> = Single.never()
+                override suspend fun saveEvent(id: Long, content: String): Event =
+                    error("Not implemented")
 
-                override fun deleteById(id: Long): Completable = Completable.never()
+                override suspend fun deleteById(id: Long) = error("Not implemented")
+
 
             },
-            schedulersFactory = TestSchedulersFactory,
             mapper = TestEventUiModelMapper(),
         )
 
