@@ -7,7 +7,9 @@ import java.time.Instant
 class NetworkEventRepository(
     private val api: EventsApi
 ) : EventRepository {
-    override suspend fun getEvents(): List<Event> = api.getAll()
+    override suspend fun getLatest(count: Int): List<Event> = api.getLatest(count)
+
+    override suspend fun getBefore(id: Long, count: Int): List<Event> = api.getBefore(id, count)
 
     override suspend fun participateById(id: Long): Event = api.participate(id)
 
