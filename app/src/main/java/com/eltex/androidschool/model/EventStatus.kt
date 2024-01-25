@@ -1,7 +1,7 @@
 package com.eltex.androidschool.model
 
 sealed interface EventStatus {
-    data object Idle : EventStatus
+    data class Idle(val finished: Boolean = false) : EventStatus
     data object NextPageLoading : EventStatus
     data object InitialLoading : EventStatus
     data object Refreshing : EventStatus

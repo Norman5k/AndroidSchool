@@ -2,7 +2,6 @@ package com.eltex.androidschool.repository
 
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.model.Event
-import java.time.Instant
 
 class NetworkEventRepository(
     private val api: EventsApi
@@ -19,7 +18,7 @@ class NetworkEventRepository(
 
     override suspend fun dislikeById(id: Long): Event = api.dislike(id)
     override suspend fun saveEvent(id: Long, content: String): Event =
-        api.save(Event(id, content, datetime = Instant.now()))
+        api.save(Event(id, content))
 
     override suspend fun deleteById(id: Long) = api.delete(id)
 

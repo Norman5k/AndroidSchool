@@ -1,10 +1,13 @@
 package com.eltex.androidschool.model
 
 import com.eltex.androidschool.utils.InstantSerializer
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.Instant
 
+@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class Event(
     @SerialName("id")
@@ -19,6 +22,7 @@ data class Event(
     @SerialName("type")
     val type: String = "",
     @SerialName("datetime")
+    @EncodeDefault
     @Serializable(InstantSerializer::class)
     val datetime: Instant = Instant.now(),
     @SerialName("link")

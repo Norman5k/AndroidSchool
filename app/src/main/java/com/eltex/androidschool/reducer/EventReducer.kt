@@ -3,12 +3,18 @@ package com.eltex.androidschool.reducer
 import com.eltex.androidschool.model.EventEffect
 import com.eltex.androidschool.model.EventMessage
 import com.eltex.androidschool.model.EventStatus
+import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.EventUiState
 import com.eltex.androidschool.mvi.Reducer
 import com.eltex.androidschool.mvi.ReducerResult
 import com.eltex.androidschool.utils.Either
 
 class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
+    private companion object {
+        const val PAGE_SIZE = 10
+        const val INITIAL_LOAD_SIZE = 3 * PAGE_SIZE
+    }
+
     override fun reduce(
         old: EventUiState,
         message: EventMessage
@@ -43,7 +49,10 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 }
 
                 is Either.Right ->
-                    old.copy(events = result.value, status = EventStatus.Idle)
+                    old.copy(
+                        events = result.value,
+                        status = EventStatus.Idle(result.value.size < INITIAL_LOAD_SIZE)
+                    )
             }
         )
 
@@ -89,9 +98,31 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
 
         )
 
-        EventMessage.LoadNextPage -> ReducerResult(
+        EventMessage.LoadNextPage -> if (old.status is EventStatus.Idle && !old.status.finished) {
+            ReducerResult(
+                old.copy(status = EventStatus.NextPageLoading,
+                    skeletons = List(PAGE_SIZE) {
+                        EventUiModel(
+                            content = "Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните",
+                            author = "Lydia Westervelt",
+                            published = "11.05.22 11:21",
+                            type = "Offline",
+                            datetime = "16.05.22 12:00",
+                            link = "https://m2.material.io/components/cards",
+                            likes = 10,
+                            participants = 2
+                        )
+                    }
+                ),
+                EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE)
+            )
+        } else {
+            ReducerResult(old)
+        }
+
+        EventMessage.Retry -> ReducerResult(
             old.copy(status = EventStatus.NextPageLoading),
-            EventEffect.LoadNextPage(old.events.last().id, 5)
+            EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE)
         )
 
         is EventMessage.NextPageLoaded -> ReducerResult(
@@ -102,7 +133,7 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
 
                 is Either.Right -> old.copy(
                     events = old.events + result.value,
-                    status = EventStatus.Idle
+                    status = EventStatus.Idle(result.value.size < PAGE_SIZE)
                 )
             }
 
@@ -110,13 +141,29 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
 
         EventMessage.Refresh -> ReducerResult(
             old.copy(
+                skeletons = if (old.events.isEmpty()) {
+                    List(INITIAL_LOAD_SIZE) {
+                        EventUiModel(
+                            content = "Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните",
+                            author = "Lydia Westervelt",
+                            published = "11.05.22 11:21",
+                            type = "Offline",
+                            datetime = "16.05.22 12:00",
+                            link = "https://m2.material.io/components/cards",
+                            likes = 10,
+                            participants = 2
+                        )
+                    }
+                } else {
+                    emptyList()
+                },
                 status = if (old.events.isEmpty()) {
                     EventStatus.InitialLoading
                 } else {
                     EventStatus.Refreshing
-                }
+                },
             ),
-            EventEffect.LoadInitialPage(15)
+            EventEffect.LoadInitialPage(INITIAL_LOAD_SIZE)
         )
 
         is EventMessage.Participate -> ReducerResult(

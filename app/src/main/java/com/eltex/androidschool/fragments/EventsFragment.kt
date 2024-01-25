@@ -22,6 +22,7 @@ import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.api.EventsApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.effecthandler.EventEffectHandler
+import com.eltex.androidschool.mapper.EventPagingModelMapper
 import com.eltex.androidschool.model.EventMessage
 import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.EventUiState
@@ -95,6 +96,10 @@ class EventsFragment : Fragment() {
                     viewModel.accept(EventMessage.Participate(event))
                 }
 
+                override fun onRetryClickListener() {
+                    viewModel.accept(EventMessage.Retry)
+                }
+
             }
         )
 
@@ -132,6 +137,8 @@ class EventsFragment : Fragment() {
             viewModel.accept(EventMessage.Refresh)
         }
 
+        val mapper = EventPagingModelMapper()
+
         viewModel.state
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { state ->
@@ -140,8 +147,6 @@ class EventsFragment : Fragment() {
                 val emptyError = state.emptyError
                 binding.errorGroup.isVisible = emptyError != null
                 binding.errorText.text = emptyError?.getText(requireContext())
-
-                binding.progress.isVisible = state.isEmptyLoading
 
                 state.singleError?.let {
                     Toast.makeText(
@@ -153,7 +158,7 @@ class EventsFragment : Fragment() {
                     viewModel.accept(EventMessage.HandleError)
                 }
 
-                eventsAdapter.submitList(state.events)
+                eventsAdapter.submitList(mapper.map(state))
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
