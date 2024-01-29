@@ -21,6 +21,15 @@ class EventItemCallback : ItemCallback<EventUiModel>() {
             participants = newItem.participants.takeIf {
                 it != oldItem.participants
             },
+            content = newItem.content.takeIf {
+                it != oldItem.content
+            },
+            attachment = newItem.attachment.takeIf {
+                it != oldItem.attachment
+            },
+            authorAvatar = newItem.authorAvatar.takeIf {
+                it != oldItem.authorAvatar
+            }
         )
             .takeIf {
                 it.isNotEmpty()

@@ -20,4 +20,15 @@
     <string name="network_error">Network error</string>
     <string name="retry">Retry</string>
     <string name="edit_event_label">Edit event</string>
+    <string name="remove">Remove</string>
+    <string name="event_picture">Event picture</string>
+    <string name="skeleton_participants" translatable="false">2</string>
+    <string name="skeleton_likes" translatable="false">10</string>
+    <string name="skeleton_link" translatable="false">https://m2.material.io/components/cards</string>
+    <string name="skeleton_content" translatable="false">Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните</string>
+    <string name="skeleton_datetime" translatable="false">16.05.22 12:00</string>
+    <string name="skeleton_type" translatable="false">Offline</string>
+    <string name="skeleton_published" translatable="false">11.05.22 11:21</string>
+    <string name="skeleton_author" translatable="false">Lydia Westervelt</string>
+    <string name="attachment_photo">Attachment Photo</string>
 </resources>

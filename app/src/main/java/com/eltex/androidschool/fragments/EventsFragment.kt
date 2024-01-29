@@ -20,6 +20,7 @@ import com.eltex.androidschool.R
 import com.eltex.androidschool.adapter.EventsAdapter
 import com.eltex.androidschool.adapter.OffsetDecoration
 import com.eltex.androidschool.api.EventsApi
+import com.eltex.androidschool.api.MediaApi
 import com.eltex.androidschool.databinding.FragmentEventsBinding
 import com.eltex.androidschool.effecthandler.EventEffectHandler
 import com.eltex.androidschool.mapper.EventPagingModelMapper
@@ -49,7 +50,13 @@ class EventsFragment : Fragment() {
                     EventViewModel(
                         Store(
                             EventReducer(),
-                            EventEffectHandler(NetworkEventRepository(EventsApi.INSTANCE)),
+                            EventEffectHandler(
+                                NetworkEventRepository(
+                                EventsApi.INSTANCE,
+                                MediaApi.INSTANCE,
+                                requireContext().contentResolver
+                            )
+                            ),
                             setOf(EventMessage.Refresh),
                             EventUiState()
                         )

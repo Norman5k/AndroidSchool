@@ -16,6 +16,8 @@ data class Event(
     val content: String = "",
     @SerialName("author")
     val author: String = "",
+    @SerialName("authorAvatar")
+    val authorAvatar: String? = null,
     @SerialName("published")
     @Serializable(InstantSerializer::class)
     val published: Instant = Instant.now(),
@@ -35,4 +37,6 @@ data class Event(
     val participatedByMe: Boolean = false,
     @SerialName("participantsIds")
     val participantsIds: Set<Long> = emptySet(),
+    @SerialName("attachment")
+    val attachment: Attachment? = null,
 )

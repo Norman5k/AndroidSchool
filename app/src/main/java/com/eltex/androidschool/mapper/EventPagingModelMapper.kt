@@ -13,13 +13,10 @@ class EventPagingModelMapper {
 
         return when (val status = eventUiState.status) {
             is EventStatus.NextPageError -> events + PagingModel.Error(status.reason)
-            EventStatus.InitialLoading -> events + eventUiState.skeletons.map {
-                PagingModel.Progress(it)
+            EventStatus.InitialLoading,
+            EventStatus.NextPageLoading -> events + List(eventUiState.skeletons) {
+                PagingModel.Progress
             }
-            EventStatus.NextPageLoading -> events + eventUiState.skeletons.map {
-                PagingModel.Progress(it)
-            }
-
             else -> events
         }
     }

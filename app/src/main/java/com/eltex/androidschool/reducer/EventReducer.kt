@@ -3,7 +3,6 @@ package com.eltex.androidschool.reducer
 import com.eltex.androidschool.model.EventEffect
 import com.eltex.androidschool.model.EventMessage
 import com.eltex.androidschool.model.EventStatus
-import com.eltex.androidschool.model.EventUiModel
 import com.eltex.androidschool.model.EventUiState
 import com.eltex.androidschool.mvi.Reducer
 import com.eltex.androidschool.mvi.ReducerResult
@@ -101,18 +100,7 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
         EventMessage.LoadNextPage -> if (old.status is EventStatus.Idle && !old.status.finished) {
             ReducerResult(
                 old.copy(status = EventStatus.NextPageLoading,
-                    skeletons = List(PAGE_SIZE) {
-                        EventUiModel(
-                            content = "Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните",
-                            author = "Lydia Westervelt",
-                            published = "11.05.22 11:21",
-                            type = "Offline",
-                            datetime = "16.05.22 12:00",
-                            link = "https://m2.material.io/components/cards",
-                            likes = 10,
-                            participants = 2
-                        )
-                    }
+                    skeletons = PAGE_SIZE
                 ),
                 EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE)
             )
@@ -142,20 +130,9 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
         EventMessage.Refresh -> ReducerResult(
             old.copy(
                 skeletons = if (old.events.isEmpty()) {
-                    List(INITIAL_LOAD_SIZE) {
-                        EventUiModel(
-                            content = "Слушайте, а как вы относитесь к тому, чтобы собраться большой компанией и поиграть в настолки? У меня есть несколько клевых игр, можем устроить вечер настолок! Пишите в лс или звоните",
-                            author = "Lydia Westervelt",
-                            published = "11.05.22 11:21",
-                            type = "Offline",
-                            datetime = "16.05.22 12:00",
-                            link = "https://m2.material.io/components/cards",
-                            likes = 10,
-                            participants = 2
-                        )
-                    }
+                    INITIAL_LOAD_SIZE
                 } else {
-                    emptyList()
+                    0
                 },
                 status = if (old.events.isEmpty()) {
                     EventStatus.InitialLoading

@@ -1,8 +1,13 @@
 package com.eltex.androidschool.adapter
 
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.eltex.androidschool.R
 import com.eltex.androidschool.databinding.CardEventBinding
+import com.eltex.androidschool.model.Attachment
 import com.eltex.androidschool.model.EventUiModel
 
 class EventViewHolder(private val binding: CardEventBinding) :
@@ -21,6 +26,25 @@ class EventViewHolder(private val binding: CardEventBinding) :
         if (payLoad.participants != null) {
             updateParticipateCount(payLoad.participants)
         }
+        if (payLoad.attachment != null) {
+            updateAttachment(payLoad.attachment)
+        }
+        if (payLoad.authorAvatar != null) {
+            updateAuthorAvatar(payLoad.authorAvatar)
+        }
+    }
+
+    private fun updateAuthorAvatar(authorAvatar: String) {
+        Glide.with(binding.avatar)
+            .load(authorAvatar)
+            .transform(CircleCrop())
+            .into(binding.avatar)
+    }
+
+    private fun updateAttachment(attachment: Attachment) {
+        Glide.with(binding.attachmentPhoto)
+            .load(attachment.url)
+            .into(binding.attachmentPhoto)
     }
 
     fun bindEvent(
@@ -29,7 +53,14 @@ class EventViewHolder(private val binding: CardEventBinding) :
         binding.content.text = event.content
         binding.author.text = event.author
         binding.published.text = event.published
-        binding.initial.text = event.author.take(1)
+        if (event.authorAvatar != null) {
+            binding.initial.isGone = true
+            updateAuthorAvatar(event.authorAvatar)
+        } else {
+            binding.avatar.setImageResource(R.drawable.avatar_background)
+            binding.initial.isVisible = true
+            binding.initial.text = event.author.take(1)
+        }
         binding.eventType.text = event.type
         binding.eventDate.text = event.datetime
         binding.link.text = event.link
@@ -37,6 +68,12 @@ class EventViewHolder(private val binding: CardEventBinding) :
         updateLikeCount(event.likes)
         updateParticipateIcon(event.participatedByMe)
         updateParticipateCount(event.participants)
+        if (event.attachment != null) {
+            binding.attachmentPhoto.isVisible = true
+            updateAttachment(event.attachment)
+        } else {
+            binding.attachmentPhoto.isGone = true
+        }
     }
 
     private fun updateParticipateIcon(participatedByMe: Boolean) {

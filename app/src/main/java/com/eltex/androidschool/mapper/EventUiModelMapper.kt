@@ -20,6 +20,8 @@ interface EventUiModelMapper {
             likes = likeOwnerIds.size,
             participatedByMe = participatedByMe,
             participants = participantsIds.size,
+            attachment = attachment,
+            authorAvatar = authorAvatar
         )
     }
 
