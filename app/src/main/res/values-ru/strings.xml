@@ -21,4 +21,7 @@
     <string name="network_error">Сетевая ошибка</string>
     <string name="retry">Повторить</string>
     <string name="edit_event_label">Редактирование события</string>
+    <string name="remove">Убрать</string>
+    <string name="event_picture">Картинка события</string>
+    <string name="attachment_photo">Вложение фото</string>
 </resources>

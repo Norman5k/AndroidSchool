@@ -7,8 +7,9 @@ import com.eltex.androidschool.model.EventUiState
 import com.eltex.androidschool.mvi.Reducer
 import com.eltex.androidschool.mvi.ReducerResult
 import com.eltex.androidschool.utils.Either
+import javax.inject.Inject
 
-class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
+class EventReducer @Inject constructor() : Reducer<EventUiState, EventEffect, EventMessage> {
     private companion object {
         const val PAGE_SIZE = 10
         const val INITIAL_LOAD_SIZE = 3 * PAGE_SIZE

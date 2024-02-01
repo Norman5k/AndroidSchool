@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.eltex.androidschool.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PostsFragment : Fragment() {
 
     override fun onCreateView(

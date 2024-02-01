@@ -4,7 +4,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("plugin.serialization") version "1.9.21"
-    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp") // Убрали версию
 }
 
 android {
@@ -89,6 +90,11 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+    val daggerVersion = "2.50"
+    implementation("com.google.dagger:hilt-android:$daggerVersion")
+    ksp("com.google.dagger:dagger-compiler:$daggerVersion")
+    ksp("com.google.dagger:hilt-compiler:$daggerVersion")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
