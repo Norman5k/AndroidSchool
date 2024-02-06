@@ -59,6 +59,10 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
     }
 }
 
@@ -95,6 +99,19 @@ dependencies {
     implementation("com.google.dagger:hilt-android:$daggerVersion")
     ksp("com.google.dagger:dagger-compiler:$daggerVersion")
     ksp("com.google.dagger:hilt-compiler:$daggerVersion")
+
+    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-graphics")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("io.coil-kt:coil-compose:2.5.0")
 
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 

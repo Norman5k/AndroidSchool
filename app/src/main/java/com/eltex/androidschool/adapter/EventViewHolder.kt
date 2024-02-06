@@ -10,7 +10,8 @@ import com.eltex.androidschool.databinding.CardEventBinding
 import com.eltex.androidschool.model.Attachment
 import com.eltex.androidschool.model.EventUiModel
 
-class EventViewHolder(private val binding: CardEventBinding) :
+class EventViewHolder(
+    private val binding: CardEventBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
     fun bindEvent(payLoad: EventPayLoad) {
@@ -50,6 +51,17 @@ class EventViewHolder(private val binding: CardEventBinding) :
     fun bindEvent(
         event: EventUiModel,
     ) {
+        /*binding.root.setContent {
+            CardEvent(
+                event = event,
+                onDeleteClickListener = { listener.onDeleteClickListener(event) },
+                onEditClickListener = { listener.onEditClickListener(event) },
+                onLikeClickListener = { listener.onLikeClickListener(event) },
+                onShareClickListener = { listener.onShareClickListener(event) },
+                onParticipateClickListener = {listener.onParticipateClickListener(event)}
+            )
+        }
+        }*/
         binding.content.text = event.content
         binding.author.text = event.author
         binding.published.text = event.published

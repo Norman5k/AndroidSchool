@@ -77,7 +77,6 @@ class NewEventFragment : Fragment() {
             }
         )
 
-
         val pickImage = registerForActivityResult(ActivityResultContracts.GetContent()) {
             it?.let {
                 viewModel.saveFile(FileModel(it, AttachmentType.IMAGE))
